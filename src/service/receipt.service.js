@@ -1,21 +1,45 @@
 const ReceiptModel = require("../model/reciept.model");
 
-const getAllReceipt = async () => {
-   return await ReceiptModel.find({});
+const getAllReceipt = async (pageSize, page) => {
+   try {
+      if (pageSize < 10 || pageSize > 20) {
+         pageSize = 10;
+      }
+      if (page < 1) {
+         page = 1;
+      }
+      receipts = await ReceiptModel.find({})
+         .limit(pageSize)
+         .skip(pageSize * (page - 1));
+      total = await ReceiptModel.find({}).estimatedDocumentCount();
+      return { reciepts: receipts, total: total };
+   } catch (error) {
+      throw new Error(error);
+   }
 };
 
 const addNewReceipt = async (data) => {
    try {
-      const newOffer = new ReceiptModel(data);
-      return await newOffer.save();
+      const newReceipt = new ReceiptModel(data);
+      return await newReceipt.save();
    } catch (error) {
       throw new Error(error);
    }
 };
 
 const getSingleReceipt = async (_receiptNumber) => {
-   const offer = await ReceiptModel.findOne({ receiptNumber: _receiptNumber });
-   return offer;
+   try {
+      const receipt = await ReceiptModel.findOne({
+         receiptNumber: _receiptNumber,
+      });
+
+      if (receipt == null) {
+         throw new Error("Receipt does not exists");
+      }
+      return receipt;
+   } catch (error) {
+      throw new Error(error);
+   }
 };
 
 const deleteSingleReceipt = async (_receiptNumber) => {

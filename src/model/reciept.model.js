@@ -73,15 +73,33 @@ const receiptSchema = mongoose.Schema({
    tokenRate: {
       type: Number,
       require: true,
+      validate(value) {
+         if (value < 0) {
+            throw new Error("Token rate must be positive number");
+         }
+      },
    },
    amountOfTime: {
       type: Number,
       require: true,
+      validate(value) {
+         if (value < 0) {
+            throw new Error("Amount of time must be positive number");
+         }
+      },
    },
    deadLine: {
       type: Number,
       require: true,
    },
 });
-const Reciept = mongoose.model("Reciept", receiptSchema);
+
+// receiptSchema.virtual("offer1", {
+//    ref: "Offers",
+//    localField: "receiptNumber",
+//    foreignField: "receiptNumber",
+//    justOne: false,
+// });
+
+const Reciept = mongoose.model("Receipt", receiptSchema);
 module.exports = Reciept;
