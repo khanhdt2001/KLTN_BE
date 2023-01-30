@@ -4,7 +4,7 @@ var validator = require("validator");
 const receiptSchema = mongoose.Schema({
    receiptNumber: {
       type: Number,
-      require: true,
+      required: true,
       unique: true,
       validate(value) {
          if (value < 0) {
@@ -15,7 +15,7 @@ const receiptSchema = mongoose.Schema({
    vendor: {
       type: String,
       lowercase: true,
-      require: true,
+      required: true,
       validate(value) {
          if (!validator.isEthereumAddress(value)) {
             throw new Error("Invalid Address");
@@ -25,7 +25,7 @@ const receiptSchema = mongoose.Schema({
    lendor: {
       type: String,
       lowercase: true,
-      require: true,
+      required: true,
       validate(value) {
          if (!validator.isEthereumAddress(value)) {
             throw new Error("Invalid Address");
@@ -35,7 +35,7 @@ const receiptSchema = mongoose.Schema({
    NFTAddress: {
       type: String,
       lowercase: true,
-      require: true,
+      required: true,
       validate(value) {
          if (!validator.isEthereumAddress(value)) {
             throw new Error("Invalid Address");
@@ -44,7 +44,7 @@ const receiptSchema = mongoose.Schema({
    },
    tokenId: {
       type: String,
-      require: true,
+      required: true,
       validate: {
          validator: function (v) {
             return /^[0-9]*$/.test(v);
@@ -54,7 +54,7 @@ const receiptSchema = mongoose.Schema({
    },
    tokenAmount: {
       type: Number,
-      require: true,
+      required: true,
       validate(value) {
          if (value < 0) {
             throw new Error("Token Amount must be positive number");
@@ -72,7 +72,7 @@ const receiptSchema = mongoose.Schema({
    },
    tokenRate: {
       type: Number,
-      require: true,
+      required: true,
       validate(value) {
          if (value < 0) {
             throw new Error("Token rate must be positive number");
@@ -81,7 +81,7 @@ const receiptSchema = mongoose.Schema({
    },
    amountOfTime: {
       type: Number,
-      require: true,
+      required: true,
       validate(value) {
          if (value < 0) {
             throw new Error("Amount of time must be positive number");
@@ -90,16 +90,16 @@ const receiptSchema = mongoose.Schema({
    },
    deadLine: {
       type: Number,
-      require: true,
+      required: true,
    },
 });
 
-// receiptSchema.virtual("offer1", {
-//    ref: "Offers",
-//    localField: "receiptNumber",
-//    foreignField: "receiptNumber",
-//    justOne: false,
-// });
+receiptSchema.virtual("offerPath", {
+   ref: "Offer",
+   localField: "receiptNumber",
+   foreignField: "receiptNumber",
+   justOne: false,
+});
 
 const Reciept = mongoose.model("Receipt", receiptSchema);
 module.exports = Reciept;

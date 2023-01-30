@@ -2,10 +2,9 @@ const mongoose = require("mongoose");
 var validator = require("validator");
 
 const offerSchema = mongoose.Schema({
-   //    receiptNumber: {
-   receipt: {
+   receiptNumber: {
       type: Number,
-      require: true,
+      required: true,
       validate(value) {
          if (value < 0) {
             throw new Error("Receipt number must be positive number");
@@ -14,7 +13,7 @@ const offerSchema = mongoose.Schema({
    },
    offerNumber: {
       type: Number,
-      require: true,
+      required: true,
       unique: true,
       validate(value) {
          if (value < 0) {
@@ -24,7 +23,7 @@ const offerSchema = mongoose.Schema({
    },
    offerTokenAmount: {
       type: Number,
-      require: true,
+      required: true,
       validate(value) {
          if (value < 0) {
             throw new Error("Token Amount must be positive number");
@@ -33,7 +32,7 @@ const offerSchema = mongoose.Schema({
    },
    offerTokenRate: {
       type: Number,
-      require: true,
+      required: true,
       validate(value) {
          if (value < 0) {
             throw new Error("Token rate must be positive number");
@@ -42,7 +41,7 @@ const offerSchema = mongoose.Schema({
    },
    offerAmountOfTime: {
       type: Number,
-      require: true,
+      required: true,
       validate(value) {
          if (value < 0) {
             throw new Error("Amount of time must be positive number");
@@ -52,7 +51,7 @@ const offerSchema = mongoose.Schema({
    lendor: {
       type: String,
       lowercase: true,
-      require: true,
+      required: true,
       validate(value) {
          if (!validator.isEthereumAddress(value)) {
             throw new Error("Invalid Address");
@@ -63,10 +62,10 @@ const offerSchema = mongoose.Schema({
 
 offerSchema.virtual("receiptPath", {
    ref: "Receipt",
-   localField: "receipt",
+   localField: "receiptNumber",
    foreignField: "receiptNumber",
    justOne: true,
 });
 
-const Offer = mongoose.model("Offers", offerSchema);
+const Offer = mongoose.model("Offer", offerSchema);
 module.exports = Offer;

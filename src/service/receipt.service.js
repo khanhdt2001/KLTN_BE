@@ -31,12 +31,12 @@ const getSingleReceipt = async (_receiptNumber) => {
    try {
       const receipt = await ReceiptModel.findOne({
          receiptNumber: _receiptNumber,
-      });
+      }).populate('offerPath');
 
       if (receipt == null) {
          throw new Error("Receipt does not exists");
       }
-      return receipt;
+      return {receipt, offers: receipt.offerPath};
    } catch (error) {
       throw new Error(error);
    }

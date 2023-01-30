@@ -32,11 +32,10 @@ const getSingleOffer = async (_offerNumber) => {
       const offer = await OfferModel.findOne({
          offerNumber: _offerNumber,
       }).populate("receiptPath");
-      console.log(offer.vendor);
       if (offer == null) {
          throw new Error("Offer does not exist");
       }
-      return offer;
+      return { offer, receipt: offer.receiptPath };
    } catch (error) {
       console.log(error);
       throw new Error(error);
