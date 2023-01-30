@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 var validator = require("validator");
-
+const OfferModel = require("./offer.model");
 const receiptSchema = mongoose.Schema({
    receiptNumber: {
       type: Number,
@@ -92,6 +92,12 @@ const receiptSchema = mongoose.Schema({
       type: Number,
       required: true,
    },
+});
+
+receiptSchema.pre("remove", async function (next) {
+   const receipt = this;
+   await OfferModel.deleteMany({ receiptNumber: receipt.receiptNumber });
+   next();
 });
 
 receiptSchema.virtual("offerPath", {

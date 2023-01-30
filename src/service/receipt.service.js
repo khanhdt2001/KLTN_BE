@@ -9,8 +9,19 @@ const getAllReceipt = async (pageSize, page) => {
          page = 1;
       }
       receipts = await ReceiptModel.find({})
+         .populate("offerPath")
          .limit(pageSize)
          .skip(pageSize * (page - 1));
+      // TODO: add more field to object 
+      for (let i = 0; i < receipts.length; i++) {
+         var element = receipts[i];
+         const obj = {offers : element.offerPath}
+         _.extend(element, obj)
+         console.log("------------------------");
+         console.log({element});
+         console.log("------------------------");
+
+      }
       total = await ReceiptModel.find({}).estimatedDocumentCount();
       return { reciepts: receipts, total: total };
    } catch (error) {
@@ -31,12 +42,12 @@ const getSingleReceipt = async (_receiptNumber) => {
    try {
       const receipt = await ReceiptModel.findOne({
          receiptNumber: _receiptNumber,
-      }).populate('offerPath');
+      }).populate("offerPath");
 
       if (receipt == null) {
          throw new Error("Receipt does not exists");
       }
-      return {receipt, offers: receipt.offerPath};
+      return { receipt, offers: receipt.offerPath };
    } catch (error) {
       throw new Error(error);
    }
