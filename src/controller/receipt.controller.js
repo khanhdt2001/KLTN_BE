@@ -9,7 +9,7 @@ const getAllReceipt = async (req, res) => {
       );
       res.status(200).send({ receipts: receipts, total: total });
    } catch (error) {
-      res.status(500).send(error);
+      res.status(500).send(error.message);
    }
 };
 

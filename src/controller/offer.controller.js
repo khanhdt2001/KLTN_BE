@@ -9,7 +9,7 @@ const getAllOffer = async (req, res) => {
       );
       res.status(200).send({ offers: offers, total: total });
    } catch (error) {
-      res.status(500).send(error);
+      res.status(500).send(error.message);
    }
 };
 
