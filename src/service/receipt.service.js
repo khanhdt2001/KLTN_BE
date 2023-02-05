@@ -1,6 +1,5 @@
 const ReceiptModel = require("../model/reciept.model");
-const AccountService = require("./account.service")
-
+const AccountService = require("./account.service");
 
 const getAllReceipt = async (pageSize, page) => {
     try {
@@ -23,7 +22,7 @@ const getAllReceipt = async (pageSize, page) => {
 
 const addNewReceipt = async (data) => {
     try {
-        await AccountService.getAccoutnDetail(data.vendor)
+        await AccountService.getAccoutnDetail(data.vendor);
         const newReceipt = new ReceiptModel(data);
         return await newReceipt.save();
     } catch (error) {

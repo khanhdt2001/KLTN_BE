@@ -26,6 +26,7 @@ const getAccoutnDetail = async (address) => {
         if (account == null) {
             throw new Error("Account does not exist");
         }
+        console.log(account);
         return {
             account: account,
             offers: account.offerPath,
