@@ -1,8 +1,8 @@
 const OfferModel = require("../model/offer.model");
-
+const AccountService = require("./account.service")
 const getAllOffer = async (pageSize, page) => {
     try {
-        if (pageSize < 10 || pageSize > 20) {
+        if (pageSize < 0) {
             pageSize = 10;
         }
         if (page < 1) {
@@ -20,6 +20,7 @@ const getAllOffer = async (pageSize, page) => {
 
 const addNewOffer = async (data) => {
     try {
+        await AccountService.getAccoutnDetail(data.lendor)
         const newOffer = new OfferModel(data);
         return await newOffer.save();
     } catch (error) {

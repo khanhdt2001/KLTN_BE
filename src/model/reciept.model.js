@@ -25,7 +25,7 @@ const receiptSchema = mongoose.Schema({
     lendor: {
         type: String,
         lowercase: true,
-        required: true,
+        default: "0x0000000000000000000000000000000000000000",
         validate(value) {
             if (!validator.isEthereumAddress(value)) {
                 throw new Error("Invalid Address");
@@ -54,7 +54,7 @@ const receiptSchema = mongoose.Schema({
     },
     tokenAmount: {
         type: Number,
-        required: true,
+        default: 0,
         validate(value) {
             if (value < 0) {
                 throw new Error("Token Amount must be positive number");
@@ -72,7 +72,7 @@ const receiptSchema = mongoose.Schema({
     },
     tokenRate: {
         type: Number,
-        required: true,
+        default: 0,
         validate(value) {
             if (value < 0) {
                 throw new Error("Token rate must be positive number");
@@ -81,7 +81,7 @@ const receiptSchema = mongoose.Schema({
     },
     amountOfTime: {
         type: Number,
-        required: true,
+        default: 0,
         validate(value) {
             if (value < 0) {
                 throw new Error("Amount of time must be positive number");
@@ -90,7 +90,7 @@ const receiptSchema = mongoose.Schema({
     },
     deadLine: {
         type: Number,
-        required: true,
+        default: 0,
     },
 });
 

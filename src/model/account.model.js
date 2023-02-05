@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+var validator = require("validator");
 const accountSchema = mongoose.Schema({
    address: {
       type: String,
@@ -16,13 +16,13 @@ const accountSchema = mongoose.Schema({
 
 accountSchema.virtual("receiptPath", {
    ref: "Receipt",
-   localFeild: "address",
+   localField: "address",
    foreignField: "vendor",
    justOne: false,
 });
 accountSchema.virtual("offerPath", {
    ref: "Offer",
-   localFeild: "address",
+   localField: "address",
    foreignField: "lendor",
    justOne: false,
 });

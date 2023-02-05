@@ -1,8 +1,10 @@
 const ReceiptModel = require("../model/reciept.model");
+const AccountService = require("./account.service")
+
 
 const getAllReceipt = async (pageSize, page) => {
     try {
-        if (pageSize < 10 || pageSize > 20) {
+        if (pageSize < 0) {
             pageSize = 10;
         }
         if (page < 1) {
@@ -12,15 +14,6 @@ const getAllReceipt = async (pageSize, page) => {
             .populate("offerPath")
             .limit(pageSize)
             .skip(pageSize * (page - 1));
-        // TODO: add more field to object
-        for (let i = 0; i < receipts.length; i++) {
-            var element = receipts[i];
-            const obj = { offers: element.offerPath };
-            _.extend(element, obj);
-            console.log("------------------------");
-            console.log({ element });
-            console.log("------------------------");
-        }
         total = await ReceiptModel.find({}).estimatedDocumentCount();
         return { reciepts: receipts, total: total };
     } catch (error) {
@@ -30,6 +23,7 @@ const getAllReceipt = async (pageSize, page) => {
 
 const addNewReceipt = async (data) => {
     try {
+        await AccountService.getAccoutnDetail(data.vendor)
         const newReceipt = new ReceiptModel(data);
         return await newReceipt.save();
     } catch (error) {
@@ -57,6 +51,9 @@ const deleteSingleReceipt = async (_receiptNumber) => {
         const receipt = await ReceiptModel.findOne({
             receiptNumber: _receiptNumber,
         });
+        if (receipt == null) {
+            throw new Error("Receipt does not exists");
+        }
         receipt.delete();
         return receipt;
     } catch (error) {
