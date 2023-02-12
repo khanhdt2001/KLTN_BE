@@ -20,9 +20,7 @@ const getEvent = async () => {
             console.log(event);
          }
       )
-      .on("data", function (event) {
-         console.log(event);
-      });
+
 };
 
 getEvent();
