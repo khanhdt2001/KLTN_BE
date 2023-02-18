@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const AccountController = require("../controller/account.controller");
 
+router.post("/connect-wallet", AccountController.connectWallet);
 router.get("/account", AccountController.getAllAccount);
 router.get("/account/:address", AccountController.getAccountDetail);
 router.post("/account", AccountController.addnewAccount);

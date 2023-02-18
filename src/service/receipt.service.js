@@ -56,7 +56,7 @@ const deleteSingleReceipt = async (_receiptNumber) => {
         receipt.delete();
         return receipt;
     } catch (error) {
-        console.log(error);
+        throw new Error(error);
     }
 };
 

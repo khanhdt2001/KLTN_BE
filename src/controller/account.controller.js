@@ -1,5 +1,15 @@
 const AccountService = require("../service/account.service");
 
+const connectWallet = async (req, res) => {
+    try {
+        const { web3Token } = req.body;
+        const jwt = await AccountService.connectWallet(web3Token);
+        res.status(200).send({ jwt: jwt });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
+
 const getAllAccount = async (req, res) => {
     try {
         const { pageSize, page } = req.body;
@@ -34,7 +44,8 @@ const addnewAccount = async (req, res) => {
 };
 
 module.exports = {
+    connectWallet,
     getAllAccount,
     getAccountDetail,
-    addnewAccount
+    addnewAccount,
 };

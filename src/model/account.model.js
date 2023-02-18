@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 var validator = require("validator");
 const jwt = require("jsonwebtoken");
@@ -32,9 +33,10 @@ accountSchema.set("toJSON", {
     },
 });
 
-accountSchema.methods.genAuthToken = async () => {
+accountSchema.methods.genAuthToken = async function () {
     const account = this;
-    const token = await jwt.sign({ _id: account._id }, "secret");
+    let expireAt = Date.now() + 900000;
+    const token = jwt.sign({ _id: account._id, _role: account.role, _expireAt: expireAt},process.env.SECRET_KEY);
     account.token = token;
     await account.save();
     return token;
