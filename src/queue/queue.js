@@ -1,26 +1,55 @@
 const contractLending = require("../contract/LendingFactory.json");
 const Web3 = require("web3");
-require("dotenv").config();
+const ReceiptService = require("../service/receipt.service");
 
-const rpcURL = process.env.WEB3_ENDPOINT;
 const web3 = new Web3();
 
-web3.setProvider(new Web3.providers.WebsocketProvider(rpcURL));
-const Lending = process.env.LENDING_FACTORY_ADDRESS;
+web3.setProvider(
+    new Web3.providers.WebsocketProvider("http://127.0.0.1:8545/")
+);
 const abiLending = contractLending.abi;
-const lending = new web3.eth.Contract(abiLending, Lending);
+const lending = new web3.eth.Contract(
+    abiLending,
+    "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+);
 
+var lastBlock = 0;
 const getEvent = async () => {
-   lending.events
-      .RegisterLending(
-         {
-            fromBlock: 0,
-         },
-         function (error, event) {
-            console.log(event);
-         }
-      )
-
+    var toBlock = (await web3.eth.getBlockNumber()) * 1;
+    console.log(lastBlock, toBlock);
+    if (lastBlock == toBlock) {
+        return;
+    }
+    lending.getPastEvents(
+        "VendorMakeRequest",
+        { fromBlock: lastBlock, toBlock: toBlock },
+        async (err, res) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (res) {
+               for (let i = 0; i < res.length; i++) {
+                  const data = {
+                     receiptNumber: res[i].returnValues.requestNumber,
+                     vendor : res[i].returnValues.vendor,
+                     NFTAddress : res[i].returnValues.NFTAddress,
+                     tokenId : res[i].returnValues.tokenId
+                  }
+                  try {
+                     await ReceiptService.addNewReceipt(data)
+                     
+                  } catch (error) {
+                     console.log({error});
+                  }
+                  
+               }
+            }
+        }
+    );
+   lastBlock = toBlock
 };
 
-getEvent();
+setInterval(async function () {
+    await getEvent();
+}, 2500);

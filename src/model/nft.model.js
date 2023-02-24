@@ -22,10 +22,6 @@ const nftSchema = mongoose.Schema({
             }
         },
     },
-    isAble : {
-        type : Boolean,
-        default : true,
-    }
 })
 
 const Nft = mongoose.model("NFT", nftSchema)

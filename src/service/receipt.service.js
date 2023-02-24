@@ -22,7 +22,6 @@ const getAllReceipt = async (pageSize, page) => {
 
 const addNewReceipt = async (data) => {
     try {
-        await AccountService.getAccoutnDetail(data.vendor);
         const newReceipt = new ReceiptModel(data);
         return await newReceipt.save();
     } catch (error) {

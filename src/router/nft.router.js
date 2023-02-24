@@ -4,6 +4,7 @@ const NftController = require("../controller/nft.controller");
 
 
 router.get("/nfts", NftController.getAllNft)
-router.put("/nfts/:nftAddress", NftController.activeOrDeActiveNft)
+router.put("/nfts/:nftAddress", NftController.deleteNft)
+router.post("/nft", NftController.addNewNft)
 
 module.exports = router;

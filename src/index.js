@@ -8,14 +8,14 @@ require("dotenv").config();
 
 const cors = require("cors");
 require("./db/mongoose");
-
+require("./queue/queue")
 const app = express();
 
 const PORT = process.env.SERVER_PORT;
 
 app.use(express.json());
 app.use(cors());
-app.use(auth);
+// app.use(auth);
 app.use(ReceiptRouter);
 app.use(OfferRouter);
 app.use(AccountRouter);
