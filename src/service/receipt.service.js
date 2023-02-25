@@ -11,10 +11,17 @@ const getAllReceipt = async (pageSize, page) => {
         }
         receipts = await ReceiptModel.find({})
             .populate("offerPath")
+            .populate("nftPath")
             .limit(pageSize)
-            .skip(pageSize * (page - 1));
+            .skip(pageSize * (page - 1))
+            const web = []
+        for (let i = 0; i < receipts.length; i++) {
+            const webAddress = receipts[i].nftPath.webAddress
+            const element = {webAddress: webAddress};
+            web.push(element)
+        }
         total = await ReceiptModel.find({}).estimatedDocumentCount();
-        return { reciepts: receipts, total: total };
+        return { reciepts: receipts, total: total, webAddress: web };
     } catch (error) {
         throw new Error(error);
     }
@@ -33,8 +40,7 @@ const getSingleReceipt = async (_receiptNumber) => {
     try {
         const receipt = await ReceiptModel.findOne({
             receiptNumber: _receiptNumber,
-        }).populate("offerPath");
-
+        }).populate("offerPath").populate("nftPath");
         if (receipt == null) {
             throw new Error("Receipt does not exists");
         }

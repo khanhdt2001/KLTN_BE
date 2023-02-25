@@ -106,6 +106,12 @@ receiptSchema.virtual("offerPath", {
     foreignField: "receiptNumber",
     justOne: false,
 });
+receiptSchema.virtual("nftPath", {
+    ref: "NFT", 
+    localField : "NFTAddress",
+    foreignField : "localAddress",
+    justOne: true
+})
 
 const Reciept = mongoose.model("Receipt", receiptSchema);
 module.exports = Reciept;

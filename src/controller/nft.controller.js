@@ -3,7 +3,7 @@ const NftService = require("../service/nft.service");
 const getAllNft = async (req, res) => {
     try {
         const { nfts: a, total: b } = await NftService.getAllNft();
-        res.status(200).send({ nfts: nfts, total: total });
+        res.status(200).send({ nfts: a, total: b });
     } catch (error) {
         res.status(500).send(error.message);
     }

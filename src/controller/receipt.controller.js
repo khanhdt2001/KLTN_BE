@@ -2,12 +2,12 @@ const ReceiptService = require("../service/receipt.service");
 
 const getAllReceipt = async (req, res) => {
     try {
-        const { pageSize, page } = req.body;
-        const { receipts: a, total: b } = await ReceiptService.getAllReceipt(
+        const { pageSize, page } = req.params;
+        const { receipts: a, total: b, webAddress: c } = await ReceiptService.getAllReceipt(
             pageSize,
             page
         );
-        res.status(200).send({ receipts: receipts, total: total });
+        res.status(200).send({ receipts: receipts, total: total, webAddress: c });
     } catch (error) {
         res.status(500).send(error.message);
     }
