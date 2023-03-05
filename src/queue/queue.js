@@ -1,7 +1,7 @@
 const contractLending = require("../contract/LendingFactory.json");
 const Web3 = require("web3");
 const ReceiptService = require("../service/receipt.service");
-
+const OfferService = require("../service/offer.service");
 const web3 = new Web3();
 
 web3.setProvider(
@@ -29,25 +29,50 @@ const getEvent = async () => {
                 return;
             }
             if (res) {
-               for (let i = 0; i < res.length; i++) {
-                  const data = {
-                     receiptNumber: res[i].returnValues.requestNumber,
-                     vendor : res[i].returnValues.vendor,
-                     NFTAddress : res[i].returnValues.NFTAddress,
-                     tokenId : res[i].returnValues.tokenId
-                  }
-                  try {
-                     await ReceiptService.addNewReceipt(data)
-                     
-                  } catch (error) {
-                     console.log({error});
-                  }
-                  
-               }
+                for (let i = 0; i < res.length; i++) {
+                    const data = {
+                        receiptNumber: res[i].returnValues.requestNumber,
+                        vendor: res[i].returnValues.vendor,
+                        NFTAddress: res[i].returnValues.NFTAddress,
+                        tokenId: res[i].returnValues.tokenId,
+                    };
+                    try {
+                        await ReceiptService.addNewReceipt(data);
+                    } catch (error) {
+                        console.log({ error });
+                    }
+                }
             }
         }
     );
-   lastBlock = toBlock
+    lending.getPastEvents(
+        "LenderMakeOffer",
+        { fromBlock: lastBlock, toBlock: toBlock },
+        async (err, res) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (res) {
+                for (let i = 0; i < res.length; i++) {
+                    const data = {
+                        receiptNumber : res[i].returnValues.requestNumber,
+                        offerNumber: res[i].returnValues.offerNumber,
+                        offerTokenAmount : res[i].returnValues.offerTokenAmount,
+                        offerTokenRate : res[i].returnValues.offerRate,
+                        offerAmountOfTime : res[i].returnValues.offerAmountOfTime,
+                        lendor : res[i].returnValues.lender,
+                    };
+                    try {
+                        await OfferService.addNewOffer(data);
+                    } catch (error) {
+                        console.log({ error });
+                    }
+                }
+            }
+        }
+    );
+    lastBlock = toBlock;
 };
 
 setInterval(async function () {

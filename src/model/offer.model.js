@@ -48,6 +48,15 @@ const offerSchema = mongoose.Schema({
             }
         },
     },
+    offerPayTime : {
+        type: Number,
+        require: true,
+        validate(value) {
+            if (value < 0) {
+                throw new Error("PayTime must be positive number");
+            }
+        },
+    },
     lendor: {
         type: String,
         lowercase: true,

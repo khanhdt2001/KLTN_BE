@@ -20,7 +20,7 @@ const getAllOffer = async (pageSize, page) => {
 
 const addNewOffer = async (data) => {
     try {
-        await AccountService.getAccoutnDetail(data.lendor)
+        // await AccountService.getAccoutnDetail(data.lendor)
         const newOffer = new OfferModel(data);
         return await newOffer.save();
     } catch (error) {
