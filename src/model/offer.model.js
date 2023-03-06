@@ -67,6 +67,7 @@ const offerSchema = mongoose.Schema({
         },
     },
 });
+offerSchema.index({receiptNumber: 1, offerNumber: 1}, {unique: true});
 
 offerSchema.virtual("receiptPath", {
     ref: "Receipt",
