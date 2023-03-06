@@ -17,15 +17,12 @@ const getAllReceipt = async (pageSize, page) => {
             const web = []
             const offer = []
         for (let i = 0; i < receipts.length; i++) {
-            const webAddress = receipts[i].nftPath.webAddress
             const offerData= receipts[i].offerPath
-            const element = {webAddress: webAddress};
             const elementOffer = {offer: offerData};
             offer.push(elementOffer)
-            web.push(element)
         }
         total = await ReceiptModel.find({}).estimatedDocumentCount();
-        return { reciepts: receipts, total: total, webAddress: web, offer: offer };
+        return { reciepts: receipts, total: total, offer: offer };
     } catch (error) {
         throw new Error(error);
     }

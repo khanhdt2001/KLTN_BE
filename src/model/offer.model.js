@@ -14,7 +14,6 @@ const offerSchema = mongoose.Schema({
     offerNumber: {
         type: Number,
         required: true,
-        unique: true,
         validate(value) {
             if (value < 0) {
                 throw new Error("Offer number must be positive number");

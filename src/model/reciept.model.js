@@ -109,7 +109,7 @@ receiptSchema.virtual("offerPath", {
 receiptSchema.virtual("nftPath", {
     ref: "NFT", 
     localField : "NFTAddress",
-    foreignField : "localAddress",
+    foreignField : "webAddress",
     justOne: true
 })
 
