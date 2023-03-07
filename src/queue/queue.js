@@ -61,6 +61,7 @@ const getEvent = async () => {
                         offerTokenAmount : res[i].returnValues.offerTokenAmount,
                         offerTokenRate : res[i].returnValues.offerRate,
                         offerAmountOfTime : res[i].returnValues.offerAmountOfTime,
+                        offerPayTime : res[i].returnValues.offerPaymenTime,
                         lendor : res[i].returnValues.lender,
                     };
                     try {

@@ -28,6 +28,34 @@ const getAllReceipt = async (pageSize, page) => {
     }
 };
 
+const getMyReceipt = async (pageSize, page, myAddress) => {
+    try {
+        if (pageSize < 0) {
+            pageSize = 10;
+        }
+        if (page < 1) {
+            page = 1;
+        }
+        console.log(pageSize, page, myAddress);
+        receipts = await ReceiptModel.find({vendor: myAddress})
+            .populate("offerPath")
+            .populate("nftPath")
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+            const web = []
+            const offer = []
+        for (let i = 0; i < receipts.length; i++) {
+            const offerData= receipts[i].offerPath
+            const elementOffer = {offer: offerData};
+            offer.push(elementOffer)
+        }
+        total = await ReceiptModel.find({vendor: myAddress}).estimatedDocumentCount();
+        return { reciepts: receipts, total: total, offer: offer };
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 const addNewReceipt = async (data) => {
     try {
         const newReceipt = new ReceiptModel(data);
@@ -77,4 +105,5 @@ module.exports = {
     getSingleReceipt,
     deleteSingleReceipt,
     updateReceipt,
+    getMyReceipt
 };

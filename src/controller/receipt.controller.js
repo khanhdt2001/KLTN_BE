@@ -3,11 +3,26 @@ const ReceiptService = require("../service/receipt.service");
 const getAllReceipt = async (req, res) => {
     try {
         const { pageSize, page } = req.params;
-        const { receipts: a, total: b, offer: d } = await ReceiptService.getAllReceipt(
-            pageSize,
-            page
-        );
-        res.status(200).send({ receipts: receipts, total: total, offer : d });
+        const {
+            receipts: a,
+            total: b,
+            offer: d,
+        } = await ReceiptService.getAllReceipt(pageSize, page);
+        res.status(200).send({ receipts: receipts, total: total, offer: d });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+const getMyReceipt = async (req, res) => {
+    try {
+        const { pageSize, page, myAddress } = req.params;
+        const {
+            receipts: a,
+            total: b,
+            offer: d,
+        } = await ReceiptService.getMyReceipt(pageSize, page, myAddress);
+        res.status(200).send({ receipts: receipts, total: total, offer: d });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -47,5 +62,6 @@ module.exports = {
     getAllReceipt,
     addNewReceipt,
     getSingleReceipt,
-    deleteReceipt
+    deleteReceipt,
+    getMyReceipt
 };
