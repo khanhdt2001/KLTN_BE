@@ -73,7 +73,7 @@ const getSingleReceipt = async (_receiptNumber) => {
         if (receipt == null) {
             throw new Error("Receipt does not exists");
         }
-        return { receipt, offers: receipt.offerPath };
+        return { receipt, offers: receipt.offerPath, nft: receipt.nftPath };
     } catch (error) {
         throw new Error(error);
     }
