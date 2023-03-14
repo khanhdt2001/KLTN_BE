@@ -1,6 +1,6 @@
 const ReceiptModel = require("../model/reciept.model");
 const AccountService = require("./account.service");
-
+const OfferService = require("./offer.service");
 const getAllReceipt = async (pageSize, page) => {
     try {
         if (pageSize < 0) {
@@ -13,13 +13,13 @@ const getAllReceipt = async (pageSize, page) => {
             .populate("offerPath")
             .populate("nftPath")
             .limit(pageSize)
-            .skip(pageSize * (page - 1))
-            const web = []
-            const offer = []
+            .skip(pageSize * (page - 1));
+        const web = [];
+        const offer = [];
         for (let i = 0; i < receipts.length; i++) {
-            const offerData= receipts[i].offerPath
-            const elementOffer = {offer: offerData};
-            offer.push(elementOffer)
+            const offerData = receipts[i].offerPath;
+            const elementOffer = { offer: offerData };
+            offer.push(elementOffer);
         }
         total = await ReceiptModel.find({}).estimatedDocumentCount();
         return { reciepts: receipts, total: total, offer: offer };
@@ -37,24 +37,26 @@ const getMyReceipt = async (pageSize, page, myAddress) => {
             page = 1;
         }
         console.log(pageSize, page, myAddress);
-        receipts = await ReceiptModel.find({vendor: myAddress})
+        receipts = await ReceiptModel.find({ vendor: myAddress })
             .populate("offerPath")
             .populate("nftPath")
             .limit(pageSize)
-            .skip(pageSize * (page - 1))
-            const web = []
-            const offer = []
+            .skip(pageSize * (page - 1));
+        const web = [];
+        const offer = [];
         for (let i = 0; i < receipts.length; i++) {
-            const offerData= receipts[i].offerPath
-            const elementOffer = {offer: offerData};
-            offer.push(elementOffer)
+            const offerData = receipts[i].offerPath;
+            const elementOffer = { offer: offerData };
+            offer.push(elementOffer);
         }
-        total = await ReceiptModel.find({vendor: myAddress}).estimatedDocumentCount();
+        total = await ReceiptModel.find({
+            vendor: myAddress,
+        }).estimatedDocumentCount();
         return { reciepts: receipts, total: total, offer: offer };
     } catch (error) {
         throw new Error(error);
     }
-}
+};
 
 const addNewReceipt = async (data) => {
     try {
@@ -69,7 +71,9 @@ const getSingleReceipt = async (_receiptNumber) => {
     try {
         const receipt = await ReceiptModel.findOne({
             receiptNumber: _receiptNumber,
-        }).populate("offerPath").populate("nftPath");
+        })
+            .populate("offerPath")
+            .populate("nftPath");
         if (receipt == null) {
             throw new Error("Receipt does not exists");
         }
@@ -96,7 +100,21 @@ const deleteSingleReceipt = async (_receiptNumber) => {
 
 const updateReceipt = async (data) => {
     try {
-    } catch (error) {}
+        await OfferService.getSingleOffer(data.offerNumber);
+        let receipt = await await ReceiptModel.findOne({
+            receiptNumber: receiptNumber,
+        });
+        receipt.lendor = data.lendor;
+        receipt.tokenAmount = data.tokenAmount;
+        receipt.tokenRate = data.tokenRate;
+        receipt.amountOfTime = data.amountOfTime;
+        receipt.paymentTime = data.paymentTime;
+        receipt.paymentCount = data.paymentCount;
+        receipt.deadLine = data.deadLine;
+        await receipt.save();
+    } catch (error) {
+        throw new Error(error);
+    }
 };
 
 module.exports = {
@@ -105,5 +123,5 @@ module.exports = {
     getSingleReceipt,
     deleteSingleReceipt,
     updateReceipt,
-    getMyReceipt
+    getMyReceipt,
 };

@@ -92,6 +92,14 @@ const receiptSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
+    paymentTime: {
+        type: Number,
+        default: 0,
+    },
+    paymentCount: {
+        type: Number,
+        default: 0,
+    }
 });
 
 receiptSchema.pre("remove", async function (next) {
