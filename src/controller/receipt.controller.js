@@ -58,10 +58,21 @@ const deleteReceipt = async (req, res) => {
     }
 };
 
+const updateReceipt = async (req, res) => {
+    try {
+        const data = req.body;
+        const receipt = await ReceiptService.updateReceipt(data)
+        res.status(202).send(receipt)
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     getAllReceipt,
     addNewReceipt,
     getSingleReceipt,
     deleteReceipt,
-    getMyReceipt
+    getMyReceipt,
+    updateReceipt
 };

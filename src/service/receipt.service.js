@@ -9,7 +9,9 @@ const getAllReceipt = async (pageSize, page) => {
         if (page < 1) {
             page = 1;
         }
-        receipts = await ReceiptModel.find({})
+        receipts = await ReceiptModel.find({
+            lendor: "0x0000000000000000000000000000000000000000",
+        })
             .populate("offerPath")
             .populate("nftPath")
             .limit(pageSize)
@@ -36,7 +38,6 @@ const getMyReceipt = async (pageSize, page, myAddress) => {
         if (page < 1) {
             page = 1;
         }
-        console.log(pageSize, page, myAddress);
         receipts = await ReceiptModel.find({ vendor: myAddress })
             .populate("offerPath")
             .populate("nftPath")
@@ -102,7 +103,7 @@ const updateReceipt = async (data) => {
     try {
         await OfferService.getSingleOffer(data.offerNumber);
         let receipt = await await ReceiptModel.findOne({
-            receiptNumber: receiptNumber,
+            receiptNumber: data.requestNumber,
         });
         receipt.lendor = data.lendor;
         receipt.tokenAmount = data.tokenAmount;
@@ -112,11 +113,23 @@ const updateReceipt = async (data) => {
         receipt.paymentCount = data.paymentCount;
         receipt.deadLine = data.deadLine;
         await receipt.save();
+        return receipt;
     } catch (error) {
         throw new Error(error);
     }
 };
-
+const vendorPayRountine = async (data) => {
+    try {
+        let receipt = await await ReceiptModel.findOne({
+            receiptNumber: data.requestNumber,
+        });
+        receipt.paymentCount = data.paidCounter;
+        await receipt.save();
+        return receipt;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 module.exports = {
     getAllReceipt,
     addNewReceipt,
@@ -124,4 +137,5 @@ module.exports = {
     deleteSingleReceipt,
     updateReceipt,
     getMyReceipt,
+    vendorPayRountine
 };

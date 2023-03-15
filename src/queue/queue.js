@@ -73,6 +73,61 @@ const getEvent = async () => {
             }
         }
     );
+    lending.getPastEvents(
+        "VendorAcceptOffer",
+        { fromBlock: lastBlock, toBlock: toBlock },
+        async (err, res) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (res) {
+          
+                for (let i = 0; i < res.length; i++) {
+                    try {
+                        const data = {
+                            requestNumber : res[i].returnValues.requestNumber,
+                            offerNumber : res[i].returnValues.offerNumber,
+                            lendor : res[i].returnValues.lender,
+                            tokenAmount : res[i].returnValues.tokenAmount,
+                            tokenRate : res[i].returnValues.tokenRate,
+                            amountOfTime : res[i].returnValues.amountOfTime,
+                            paymentTime : res[i].returnValues.paymentTime,
+                            paymentCount : res[i].returnValues.paymentCount,
+                            deadLine : res[i].returnValues.deadLine,
+                        }
+                        await ReceiptService.updateReceipt(data);
+                    } catch (error) {
+                        console.log({ error });
+                    }
+                }
+            }
+        }
+    );
+    lending.getPastEvents(
+        "VendorPayRountine",
+        { fromBlock: lastBlock, toBlock: toBlock },
+        async(err, res) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (res) {
+                // console.log("res", res);
+                for (let i = 0; i < res.length; i++) {
+                    try {
+                        const data = {
+                            requestNumber: res[i].returnValues.requestNumber,
+                            paidCounter: res[i].returnValues.paidCounter
+                        }
+                        await ReceiptService.vendorPayRountine(data)
+                    } catch (error) {
+                        console.log({error});
+                    }                    
+                }
+            }
+        }
+    )
     lastBlock = toBlock;
 };
 

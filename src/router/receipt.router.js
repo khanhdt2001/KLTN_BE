@@ -7,4 +7,5 @@ router.get("/receipt/:pageSize/:page/:myAddress", ReceiptController.getMyReceipt
 router.get("/receipt/:receiptNumber", ReceiptController.getSingleReceipt);
 router.post("/receipt", ReceiptController.addNewReceipt);
 router.delete("/receipt/:receiptNumber", ReceiptController.deleteReceipt);
+router.put("/receipt", ReceiptController.updateReceipt);
 module.exports = router;
