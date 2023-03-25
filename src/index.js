@@ -8,7 +8,7 @@ require("dotenv").config();
 
 const cors = require("cors");
 require("./db/mongoose");
-require("./queue/queue")
+require("./queue/queue");
 const app = express();
 
 const PORT = process.env.SERVER_PORT;

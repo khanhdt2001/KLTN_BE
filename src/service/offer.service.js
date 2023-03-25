@@ -17,7 +17,32 @@ const getAllOffer = async (pageSize, page) => {
         throw new Error(error);
     }
 };
-
+const getMyOffer = async(pageSize, page, myAddress) => {
+    try {
+        if (pageSize < 0) {
+            pageSize = 10;
+        }
+        if (page < 1) {
+            page = 1;
+        }
+        offers = await OfferModel.find({lendor: myAddress})
+        .populate("receiptPath")
+        .limit(pageSize)
+        .skip(pageSize * (page - 1));
+        const receipt = [];
+        for (let i = 0; i < offers.length; i++) {
+            const receiptData = offers[i].receiptPath;
+            const elementReceipt = {receipt:receiptData }
+            receipt.push(elementReceipt);
+        }
+        total = await OfferModel.find({
+            lendor: myAddress,
+        }).estimatedDocumentCount();
+        return { offers: offers, total: total, receipt: receipt };
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 const addNewOffer = async (data) => {
     try {
         // await AccountService.getAccoutnDetail(data.lendor)
@@ -45,6 +70,7 @@ const getSingleOffer = async (_offerNumber) => {
 
 module.exports = {
     getAllOffer,
+    getMyOffer,
     addNewOffer,
     getSingleOffer,
 };

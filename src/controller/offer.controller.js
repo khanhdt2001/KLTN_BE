@@ -12,7 +12,17 @@ const getAllOffer = async (req, res) => {
       res.status(500).send(error.message);
    }
 };
-
+const getMyOffer = async(req, res) => {
+   try {
+      const { pageSize, page, myAddress } = req.params;
+      const {
+         offers: a, total: b, receipt: c 
+      } = await OfferService.getMyOffer( pageSize, page, myAddress )
+      res.status(200).send({offers: a, receipts: c, total: total})
+   } catch (error) {
+      res.status(500).send(error.message);
+   }
+}
 const addNewOffer = async (req, res) => {
     try {
         const data = req.body;
@@ -34,5 +44,6 @@ const getSingleOffer = async (req, res) => {
 module.exports = {
     getAllOffer,
     addNewOffer,
-    getSingleOffer
+    getSingleOffer,
+    getMyOffer
 }
