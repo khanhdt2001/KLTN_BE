@@ -1,5 +1,5 @@
 const OfferModel = require("../model/offer.model");
-const AccountService = require("./account.service")
+const AccountService = require("./account.service");
 const getAllOffer = async (pageSize, page) => {
     try {
         if (pageSize < 0) {
@@ -17,7 +17,7 @@ const getAllOffer = async (pageSize, page) => {
         throw new Error(error);
     }
 };
-const getMyOffer = async(pageSize, page, myAddress) => {
+const getMyOffer = async (pageSize, page, myAddress) => {
     try {
         if (pageSize < 0) {
             pageSize = 10;
@@ -25,14 +25,14 @@ const getMyOffer = async(pageSize, page, myAddress) => {
         if (page < 1) {
             page = 1;
         }
-        offers = await OfferModel.find({lendor: myAddress})
-        .populate("receiptPath")
-        .limit(pageSize)
-        .skip(pageSize * (page - 1));
+        offers = await OfferModel.find({ lendor: myAddress })
+            .populate("receiptPath")
+            .limit(pageSize)
+            .skip(pageSize * (page - 1));
         const receipt = [];
         for (let i = 0; i < offers.length; i++) {
             const receiptData = offers[i].receiptPath;
-            const elementReceipt = {receipt:receiptData }
+            const elementReceipt = { receipt: receiptData };
             receipt.push(elementReceipt);
         }
         total = await OfferModel.find({
@@ -42,7 +42,7 @@ const getMyOffer = async(pageSize, page, myAddress) => {
     } catch (error) {
         throw new Error(error);
     }
-}
+};
 const addNewOffer = async (data) => {
     try {
         // await AccountService.getAccoutnDetail(data.lendor)
@@ -68,9 +68,20 @@ const getSingleOffer = async (_offerNumber) => {
     }
 };
 
+const updateOffer = async (_offerNumber) => {
+    try {
+        let offer = await OfferModel.findOne({ offerNumber: _offerNumber });
+        offer.checked = true;
+        await offer.save()
+        return offer;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 module.exports = {
     getAllOffer,
     getMyOffer,
     addNewOffer,
     getSingleOffer,
+    updateOffer,
 };

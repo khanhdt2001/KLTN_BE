@@ -102,7 +102,9 @@ const deleteSingleReceipt = async (_receiptNumber) => {
 const updateReceipt = async (data) => {
     try {
         await OfferService.getSingleOffer(data.offerNumber);
-        let receipt = await await ReceiptModel.findOne({
+        await OfferService.updateOffer(data.offerNumber);
+
+        let receipt = await ReceiptModel.findOne({
             receiptNumber: data.requestNumber,
         });
         receipt.lendor = data.lendor;
@@ -120,7 +122,7 @@ const updateReceipt = async (data) => {
 };
 const vendorPayRountine = async (data) => {
     try {
-        let receipt = await await ReceiptModel.findOne({
+        let receipt = await ReceiptModel.findOne({
             receiptNumber: data.requestNumber,
         });
         receipt.paymentCount = data.paidCounter;
@@ -137,5 +139,5 @@ module.exports = {
     deleteSingleReceipt,
     updateReceipt,
     getMyReceipt,
-    vendorPayRountine
+    vendorPayRountine,
 };

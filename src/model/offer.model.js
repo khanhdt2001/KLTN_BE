@@ -66,6 +66,10 @@ const offerSchema = mongoose.Schema({
             }
         },
     },
+    checked: {
+        type: Boolean,
+        default: false,
+    }
 });
 offerSchema.index({receiptNumber: 1, offerNumber: 1}, {unique: true});
 

@@ -2,6 +2,7 @@ const contractLending = require("../contract/LendingFactory.json");
 const Web3 = require("web3");
 const ReceiptService = require("../service/receipt.service");
 const OfferService = require("../service/offer.service");
+const Offer = require("../model/offer.model");
 const web3 = new Web3();
 
 web3.setProvider(
