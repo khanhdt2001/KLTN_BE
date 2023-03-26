@@ -129,6 +129,26 @@ const getEvent = async () => {
             }
         }
     )
+    lending.getPastEvents(
+        "WithDrawNFT",
+        { fromBlock: lastBlock, toBlock: toBlock },
+        async(err, res) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            for (let i = 0; i < res.length; i++) {
+                try {
+                    const data = {
+                        requestNumber: res[i].returnValues.requestNumber,
+                    }
+                    await ReceiptService.withdrawNft(data)
+                } catch (error) {
+                    console.log({error});
+                }                    
+            }
+        }
+    )
     lastBlock = toBlock;
 };
 

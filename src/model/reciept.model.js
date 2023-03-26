@@ -99,7 +99,12 @@ const receiptSchema = mongoose.Schema({
     paymentCount: {
         type: Number,
         default: 0,
+    },
+    out: {
+        type: Boolean,
+        default: false
     }
+
 });
 
 receiptSchema.pre("remove", async function (next) {

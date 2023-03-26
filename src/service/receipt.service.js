@@ -101,8 +101,9 @@ const deleteSingleReceipt = async (_receiptNumber) => {
 
 const updateReceipt = async (data) => {
     try {
+        console.log(data);
         await OfferService.getSingleOffer(data.offerNumber);
-        await OfferService.updateOffer(data.offerNumber);
+        await OfferService.updateOffer(data.offerNumber, data.requestNumber);
 
         let receipt = await ReceiptModel.findOne({
             receiptNumber: data.requestNumber,
@@ -132,6 +133,18 @@ const vendorPayRountine = async (data) => {
         throw new Error(error);
     }
 };
+const withdrawNft = async (data) => {
+    try {
+        let receipt = await ReceiptModel.findOne({
+            receiptNumber: data.requestNumber,
+        });
+        receipt.out = true;
+        await receipt.save();
+    } catch (error) {
+        throw new Error(error);
+        
+    }
+}
 module.exports = {
     getAllReceipt,
     addNewReceipt,
@@ -140,4 +153,5 @@ module.exports = {
     updateReceipt,
     getMyReceipt,
     vendorPayRountine,
+    withdrawNft
 };

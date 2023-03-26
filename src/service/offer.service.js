@@ -68,9 +68,9 @@ const getSingleOffer = async (_offerNumber) => {
     }
 };
 
-const updateOffer = async (_offerNumber) => {
+const updateOffer = async (_offerNumber, requestNumber) => {
     try {
-        let offer = await OfferModel.findOne({ offerNumber: _offerNumber });
+        let offer = await OfferModel.findOne({ offerNumber: _offerNumber, receiptNumber :  requestNumber});
         offer.checked = true;
         await offer.save()
         return offer;
