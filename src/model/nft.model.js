@@ -12,6 +12,10 @@ const nftSchema = mongoose.Schema({
             }
         },
     },
+    price : {
+        type: Number,
+        default: 10,
+    }
 })
 
 const Nft = mongoose.model("NFT", nftSchema)

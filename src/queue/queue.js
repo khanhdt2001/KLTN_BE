@@ -17,7 +17,6 @@ const lending = new web3.eth.Contract(
 var lastBlock = 0;
 const getEvent = async () => {
     var toBlock = (await web3.eth.getBlockNumber()) * 1;
-    console.log(lastBlock, toBlock);
     if (lastBlock == toBlock) {
         return;
     }

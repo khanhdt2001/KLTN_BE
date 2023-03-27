@@ -4,15 +4,18 @@ const OfferRouter = require("./router/offer.router");
 const AccountRouter = require("./router/account.router");
 const NftRouter = require("./router/nft.router");
 const auth = require("./middleware/authen");
+const cronJob = require("./cronjob/cronjob")
 require("dotenv").config();
 
 const cors = require("cors");
 require("./db/mongoose");
-require("./queue/queue");
+// require("./queue/queue");
 const app = express();
+// console.log(cronJob);
+cronJob.start();
+
 
 const PORT = process.env.SERVER_PORT;
-
 app.use(express.json());
 app.use(cors());
 // app.use(auth);
