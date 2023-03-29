@@ -33,8 +33,18 @@ const addNewNft = async (data) => {
     }
 };
 
+const updateNft = async (data) => {
+    try {
+        nft = await NftModel.findOne({ webAddress: data.NftAddress });
+        nft.price = data.price;
+        await nft.save()
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 module.exports = {
     getAllNft,
     deleteNft,
     addNewNft,
+    updateNft
 };

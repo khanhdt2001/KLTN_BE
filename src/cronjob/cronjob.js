@@ -1,29 +1,31 @@
 const CronJob = require("cron").CronJob;
-const axios = require('axios');
-const crawl =() => {
-    console.log("--------------------------------");
-    axios.get('https://api.coinmarketcap.com/data-api/v3/nft/collections?start=0&limit=10&sort=volume&desc=true&period=1')
-  .then(function (response) {
-    const collection = response.data
-    console.log(collection);
-    console.log(collection.data.collections);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .finally(function () {
-    // always executed
-  });
-}
+const axios = require("axios");
+const NftService = require("../service/nft.service");
 
+const crawl = async () => {
+   console.log("hihihihih");
+   const response = await axios.get(
+      "https://api.coinmarketcap.com/data-api/v3/nft/collections?start=0&limit=10&sort=volume&desc=true&period=1"
+   );
 
-var job = new CronJob(
-    '* * * * * *',
-    crawl,
-    null,
-    true,
-    'Asia/Ho_Chi_Minh'
-);
+   const collection = response.data.data.collections;
+   const { nfts: a, total: b } = await NftService.getAllNft();
+   a.forEach(async (data) => {
+      const found = collection.find(
+         (element) =>
+            element.blockchain === "Ethereum" &&
+            element.contractAddress === data.webAddress
+      );
+      if (found) {
+        const nft = {
+          NftAddress : data.webAddress,
+          price : found.floorPrice,
+        }
+        await NftService.updateNft(nft)
+      }
+   });
+};
+
+var job = new CronJob("48 15 * * *", crawl, null, true, "Asia/Ho_Chi_Minh");
 // job.start()
 module.exports = job;

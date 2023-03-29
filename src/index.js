@@ -9,9 +9,8 @@ require("dotenv").config();
 
 const cors = require("cors");
 require("./db/mongoose");
-// require("./queue/queue");
+require("./queue/queue");
 const app = express();
-// console.log(cronJob);
 cronJob.start();
 
 
