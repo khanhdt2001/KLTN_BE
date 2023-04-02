@@ -26,6 +26,6 @@ const crawl = async () => {
    });
 };
 
-var job = new CronJob("48 15 * * *", crawl, null, true, "Asia/Ho_Chi_Minh");
+var job = new CronJob("54 13 * * *", crawl, null, true, "Asia/Ho_Chi_Minh");
 // job.start()
 module.exports = job;

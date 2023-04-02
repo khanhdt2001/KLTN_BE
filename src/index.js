@@ -3,6 +3,7 @@ const ReceiptRouter = require("./router/receipt.router");
 const OfferRouter = require("./router/offer.router");
 const AccountRouter = require("./router/account.router");
 const NftRouter = require("./router/nft.router");
+const ChannelRouter = require("./router/channel.router");
 const auth = require("./middleware/authen");
 const cronJob = require("./cronjob/cronjob")
 require("dotenv").config();
@@ -22,6 +23,7 @@ app.use(ReceiptRouter);
 app.use(OfferRouter);
 app.use(AccountRouter);
 app.use(NftRouter);
+app.use(ChannelRouter);
 
 app.listen(5000, () => {
     console.log(`Server is running on port: 5000`);

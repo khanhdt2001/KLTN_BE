@@ -1,6 +1,7 @@
 const ReceiptModel = require("../model/reciept.model");
 const AccountService = require("./account.service");
 const OfferService = require("./offer.service");
+const ChannelService = require("./channel.service");
 const getAllReceipt = async (pageSize, page) => {
     try {
         if (pageSize < 0) {
@@ -62,6 +63,7 @@ const getMyReceipt = async (pageSize, page, myAddress) => {
 const addNewReceipt = async (data) => {
     try {
         const newReceipt = new ReceiptModel(data);
+        await ChannelService.createChannel(data.receiptNumber);
         return await newReceipt.save();
     } catch (error) {
         throw new Error(error);
@@ -116,6 +118,11 @@ const updateReceipt = async (data) => {
         receipt.paymentCount = data.paymentCount;
         receipt.deadLine = data.deadLine;
         await receipt.save();
+        await ChannelService.addAccess(
+            data.requestNumber,
+            receipt.vendor,
+            data.lendor
+        );
         return receipt;
     } catch (error) {
         throw new Error(error);
@@ -142,9 +149,8 @@ const withdrawNft = async (data) => {
         await receipt.save();
     } catch (error) {
         throw new Error(error);
-        
     }
-}
+};
 module.exports = {
     getAllReceipt,
     addNewReceipt,
@@ -153,5 +159,5 @@ module.exports = {
     updateReceipt,
     getMyReceipt,
     vendorPayRountine,
-    withdrawNft
+    withdrawNft,
 };
