@@ -1,3 +1,4 @@
+const { watch } = require("../model/channel.model");
 const NftService = require("../service/nft.service");
 
 const getAllNft = async (req, res) => {
@@ -28,9 +29,17 @@ const addNewNft = async (req, res) => {
         res.status(400).send(error.message)
     }
 }
-
+const getlistSupportedNft = async (req, res) => {
+    try {
+        const data = NftService.getlistSupportedNft()
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+}
 module.exports = {
     getAllNft,
     deleteNft,
-    addNewNft
+    addNewNft,
+    getlistSupportedNft
 }

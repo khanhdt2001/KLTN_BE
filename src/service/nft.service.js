@@ -1,5 +1,5 @@
 const NftModel = require("../model/nft.model");
-
+const fs = require('fs');
 const getAllNft = async () => {
     var nft, total;
     try {
@@ -42,9 +42,18 @@ const updateNft = async (data) => {
         throw new Error(error);
     }
 }
+const getlistSupportedNft =  () => {
+    try {
+        const rawdata = fs.readFileSync('./src/model/resource/supported_nft.json');
+        return rawdata;
+      } catch (err) {
+        console.error(err);
+      }
+}
 module.exports = {
     getAllNft,
     deleteNft,
     addNewNft,
-    updateNft
+    updateNft,
+    getlistSupportedNft
 };
