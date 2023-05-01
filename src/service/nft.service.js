@@ -24,6 +24,28 @@ const deleteNft = async (NftAddress) => {
     }
 };
 
+const checkNFT = async (data) => {
+    try {
+        // load supported nft
+        const rawdata = fs.readFileSync(
+            "./src/model/resource/supported_nft.json"
+        );
+        const suppotred = JSON.parse(rawdata.toString());
+
+        const found = suppotred.collections.find(
+            (element) =>
+                element.blockchain === "Ethereum" &&
+                element.contractAddress === data.webAddress
+        );
+        if (!found) {
+            throw new Error("Not in supported NFT")
+        }
+        return "found in supported NFT"
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 const addNewNft = async (data) => {
     try {
         // load supported nft
@@ -72,4 +94,5 @@ module.exports = {
     addNewNft,
     updateNft,
     getlistSupportedNft,
+    checkNFT
 };

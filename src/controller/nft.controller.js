@@ -37,9 +37,19 @@ const getlistSupportedNft = async (req, res) => {
         res.status(400).send(error.message)
     }
 }
+const checkNFT = async (req, res) => {
+    try {
+        const data = req.body
+        const response = await NftService.checkNFT(data)
+        res.status(200).send(response)
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+}
 module.exports = {
     getAllNft,
     deleteNft,
     addNewNft,
-    getlistSupportedNft
+    getlistSupportedNft,
+    checkNFT
 }
