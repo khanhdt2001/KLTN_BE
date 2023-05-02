@@ -2,6 +2,7 @@ const contractLending = require("../contract/LendingFactory.json");
 const Web3 = require("web3");
 const ReceiptService = require("../service/receipt.service");
 const OfferService = require("../service/offer.service");
+const NftService = require("../service/nft.service");
 const Offer = require("../model/offer.model");
 const web3 = new Web3();
 
@@ -148,6 +149,49 @@ const getEvent = async () => {
             }
         }
     )
+    lending.getPastEvents(
+        "RegisterNFT",
+        { fromBlock: lastBlock, toBlock: toBlock },
+        async (err, res) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (res.length > 0) {
+                console.log("res", res);
+                for (let i = 0; i < res.length; i++) {
+                    try {
+                        const data =  {
+                            "webAddress" : res[i].returnValues.NFTAddress
+                        }
+                        await NftService.addNewNft(data)
+                    } catch (error) {
+                        console.log({ error });
+                    }
+                }
+            }
+        }
+    );
+    lending.getPastEvents(
+        "UnRegisterNFT",
+        { fromBlock: lastBlock, toBlock: toBlock },
+        async (err, res) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (res.length > 0) {
+                console.log("res delete", res);
+                for (let i = 0; i < res.length; i++) {
+                    try {
+                        await NftService.deleteNft(res[i].returnValues.NFTAddress)
+                    } catch (error) {
+                        console.log({ error });
+                    }
+                }
+            }
+        }
+    );
     lastBlock = toBlock;
 };
 

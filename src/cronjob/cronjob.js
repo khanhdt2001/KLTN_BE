@@ -5,7 +5,7 @@ const fs = require('fs');
 const crawl = async () => {
    console.log("hihihihih");
    const response = await axios.get(
-      "https://api.coinmarketcap.com/data-api/v3/nft/collections?start=0&limit=10&sort=volume&desc=true&period=1"
+      "https://api.coinmarketcap.com/data-api/v3/nft/collections?start=0&limit=50&sort=volume&desc=true&period=1"
    );
    fs.writeFile('./src/model/resource/supported_nft.json',JSON.stringify(response.data.data), (err) => {
       if (err) throw err;

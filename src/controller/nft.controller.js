@@ -12,7 +12,7 @@ const getAllNft = async (req, res) => {
 
 const deleteNft = async (req, res) => {
     try {
-        const { nftAddress } = req.body;
+        const { nftAddress } = req.params;
         const nft = await NftService.deleteNft(nftAddress);
         res.status(200).send(nft);
     } catch (error) {

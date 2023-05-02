@@ -1,3 +1,4 @@
+const { log } = require("console");
 const NftModel = require("../model/nft.model");
 const fs = require("fs");
 const getAllNft = async () => {
@@ -13,12 +14,14 @@ const getAllNft = async () => {
 
 const deleteNft = async (NftAddress) => {
     try {
-        nft = await NftModel.findOne({ localAddress: NftAddress });
+        nft = await NftModel.findOne({ webAddress: NftAddress });
         if (nft == null) {
             throw new Error("NFT does not exists");
         }
-        nft.delete();
-        return nft;
+        console.log("nft", nft);
+        const res = await NftModel.deleteOne({ webAddress: NftAddress });
+        console.log("res----", res);
+        
     } catch (error) {
         throw new Error(error);
     }
@@ -31,11 +34,11 @@ const checkNFT = async (data) => {
             "./src/model/resource/supported_nft.json"
         );
         const suppotred = JSON.parse(rawdata.toString());
-
+        const lowerAddress = data.webAddress.toLowerCase();
         const found = suppotred.collections.find(
             (element) =>
                 element.blockchain === "Ethereum" &&
-                element.contractAddress === data.webAddress
+                element.contractAddress === lowerAddress
         );
         if (!found) {
             throw new Error("Not in supported NFT")
@@ -53,11 +56,11 @@ const addNewNft = async (data) => {
             "./src/model/resource/supported_nft.json"
         );
         const suppotred = JSON.parse(rawdata.toString());
-
+        const lowerAddress = data.webAddress.toLowerCase();
         const found = suppotred.collections.find(
             (element) =>
                 element.blockchain === "Ethereum" &&
-                element.contractAddress === data.webAddress
+                element.contractAddress === lowerAddress
         );
         if (!found) {
             throw new Error("Not in supported NFT")
