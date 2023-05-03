@@ -21,7 +21,6 @@ const deleteNft = async (NftAddress) => {
         console.log("nft", nft);
         const res = await NftModel.deleteOne({ webAddress: NftAddress });
         console.log("res----", res);
-        
     } catch (error) {
         throw new Error(error);
     }
@@ -41,13 +40,13 @@ const checkNFT = async (data) => {
                 element.contractAddress === lowerAddress
         );
         if (!found) {
-            throw new Error("Not in supported NFT")
+            throw new Error("Not in supported NFT");
         }
-        return "found in supported NFT"
+        return "found in supported NFT";
     } catch (error) {
         throw new Error(error);
     }
-}
+};
 
 const addNewNft = async (data) => {
     try {
@@ -63,9 +62,13 @@ const addNewNft = async (data) => {
                 element.contractAddress === lowerAddress
         );
         if (!found) {
-            throw new Error("Not in supported NFT")
+            throw new Error("Not in supported NFT");
         }
-        const newNft = new NftModel(data);
+        const nft = {
+            webAddress: data.webAddress,
+            price: found.floorPrice,
+        };
+        const newNft = new NftModel(nft);
         return await newNft.save();
     } catch (error) {
         throw new Error(error);
@@ -97,5 +100,5 @@ module.exports = {
     addNewNft,
     updateNft,
     getlistSupportedNft,
-    checkNFT
+    checkNFT,
 };
