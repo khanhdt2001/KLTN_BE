@@ -4,17 +4,21 @@ const NftService = require("../service/nft.service");
 const fs = require('fs');
 const crawl = async () => {
    console.log("hihihihih");
-   const response = await axios.get(
-      "https://api.coinmarketcap.com/data-api/v3/nft/collections?start=0&limit=50&sort=volume&desc=true&period=1"
-   );
-   fs.writeFile('./src/model/resource/supported_nft.json',JSON.stringify(response.data.data), (err) => {
-      if (err) throw err;
-      console.log('Data written to file');
-  });
-   const collection = response.data.data.collections;
+   // const response = await axios.get(
+   //    "https://api.coinmarketcap.com/data-api/v3/nft/collections?start=0&limit=50&sort=volume&desc=true&period=1"
+   // );
+//    fs.readFileSync('./src/model/resource/supported_nft.json',JSON.stringify(response.data.data), (err) => {
+//       if (err) throw err;
+//       console.log('Data written to file');
+//   });
+  const rawdata = fs.readFileSync(
+   "./src/model/resource/supported_nft.json"
+);
+const suppotred = JSON.parse(rawdata.toString());
+   // const collection = response.data.data.collections;
    const { nfts: a, total: b } = await NftService.getAllNft();
    a.forEach(async (data) => {
-      const found = collection.find(
+      const found = suppotred.collections.find(
          (element) =>
             element.blockchain === "Ethereum" &&
             element.contractAddress === data.webAddress
